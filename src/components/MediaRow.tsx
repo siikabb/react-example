@@ -1,10 +1,8 @@
+import {Link} from 'react-router-dom';
 import {MediaItem} from '../types/DBTypes';
 
-const MediaRow = (props: {
-  item: MediaItem;
-  setSelectedItem: (item: MediaItem | undefined) => void;
-}) => {
-  const {item, setSelectedItem} = props;
+const MediaRow = (props: {item: MediaItem}) => {
+  const {item} = props;
   return (
     <tr className="media-row">
       <td>
@@ -16,13 +14,9 @@ const MediaRow = (props: {
       <td>{item.filesize}</td>
       <td>{item.media_type}</td>
       <td>
-        <button
-          onClick={() => {
-            setSelectedItem(item);
-          }}
-        >
+        <Link to="/single" state={item}>
           View
-        </button>
+        </Link>
       </td>
     </tr>
   );
