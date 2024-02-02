@@ -7,7 +7,7 @@ import Layout from './views/Layout';
 
 const App = () => {
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
@@ -16,7 +16,6 @@ const App = () => {
           <Route path="/single" element={<Single />} />
         </Route>
       </Routes>
-      {/* TODO: implement router for switching between views */}
     </Router>
   );
 };
