@@ -19,6 +19,10 @@
   padding: 2rem;
 }
 
+p {
+  color: rgba(255, 255, 255, 0.87);
+}
+
 /* nav */
 nav ul {
   list-style-type: none;
