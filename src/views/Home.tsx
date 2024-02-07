@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import {fetchData} from '../lib/utils';
 
 const Home = () => {
-  const [mediaArray, setMediaArray] = useState<MediaItem[]>([]);
+  const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
 
   const getMedia = async () => {
     try {
