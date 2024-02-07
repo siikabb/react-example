@@ -1,4 +1,4 @@
-import {MediaItem, MediaItemWithOwner} from '../types/DBTypes';
+import {MediaItem, MediaItemWithOwner, User} from '../types/DBTypes';
 import MediaRow from '../components/MediaRow';
 import {useEffect, useState} from 'react';
 import {fetchData} from '../lib/utils';
@@ -8,21 +8,25 @@ const Home = () => {
 
   const getMedia = async () => {
     try {
-      const data = await fetchData<MediaItem[]>(
+      const mediaItems = await fetchData<MediaItem[]>(
         import.meta.env.VITE_MEDIA_API + '/media',
       );
 
-      const dataWithOwner: MediaItemWithOwner = await Promise.all(
-        data.map((item) => {
-          const username = fetchData(
-            import.meta.VITE_AUTH_API + '/users/' + item.user_id,
+      const itemsWithOwner: MediaItemWithOwner[] = await Promise.all(
+        mediaItems.map(async (item) => {
+          const owner = await fetchData<User>(
+            import.meta.env.VITE_AUTH_API + '/users/' + item.user_id,
           );
-          const itemWithOwner: MediaItemWithOwner = {username, ...item};
-          // TODO: fix this!!!
+          const itemWithOwner: MediaItemWithOwner = {
+            ...item,
+            username: owner.username,
+          };
+          return itemWithOwner;
         }),
       );
 
-      setMediaArray(data);
+      setMediaArray(itemsWithOwner);
+      console.log('mediaArray', itemsWithOwner);
     } catch (error) {
       console.error('getMedia failed', error);
     }
@@ -44,6 +48,7 @@ const Home = () => {
             <th>Created</th>
             <th>Size</th>
             <th>Type</th>
+            <th>Owner</th>
           </tr>
         </thead>
         <tbody>
