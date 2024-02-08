@@ -9,11 +9,15 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const doLogin = async () => {
-    console.log('submit callback, inputs:', inputs);
-    const loginResult = await postLogin(inputs as Credentials);
-    if (loginResult) {
-      localStorage.setItem('token', loginResult.token);
-      navigate('/');
+    try {
+      console.log('submit callback, inputs:', inputs);
+      const loginResult = await postLogin(inputs as Credentials);
+      if (loginResult) {
+        localStorage.setItem('token', loginResult.token);
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('doLogin failed', error);
     }
   };
 
