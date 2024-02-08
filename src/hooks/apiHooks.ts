@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {MediaItem, MediaItemWithOwner, User} from '../types/DBTypes';
 import {fetchData} from '../lib/utils';
 import {Credentials} from '../types/LocalTypes';
-import {LoginResponse} from '../types/MessageTypes';
+import {LoginResponse, UserResponse} from '../types/MessageTypes';
 
 const useMedia = (): MediaItemWithOwner[] => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
@@ -41,7 +41,7 @@ const useMedia = (): MediaItemWithOwner[] => {
 };
 
 const useAuthentication = () => {
-  const postLogin = async (creds) => {
+  const postLogin = async (creds: Credentials) => {
     try {
       return await fetchData<LoginResponse>(
         import.meta.env.VITE_AUTH_API + '/auth/login',
@@ -59,4 +59,25 @@ const useAuthentication = () => {
   return {postLogin};
 };
 
-export {useMedia, useAuthentication};
+const useUser = () => {
+  const getUserByToken = async (token: string) => {
+    try {
+      const options = {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      };
+
+      return await fetchData<UserResponse>(
+        import.meta.env.VITE_AUTH_API + '/users/token',
+        options,
+      );
+    } catch (error) {
+      console.error('useUser failed', error);
+    }
+  };
+
+  return {getUserByToken};
+};
+
+export {useMedia, useAuthentication, useUser};
