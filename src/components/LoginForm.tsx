@@ -1,30 +1,21 @@
-import {useNavigate} from 'react-router-dom';
-import {useAuthentication} from '../hooks/apiHooks';
 import {useForm} from '../hooks/formHooks';
 import {Credentials} from '../types/LocalTypes';
+import {useUserContext} from '../hooks/contextHooks';
 
 const LoginForm = () => {
-  const {postLogin} = useAuthentication();
+  const {handleLogin} = useUserContext();
+
   const initValues: Credentials = {username: '', password: ''};
-  const navigate = useNavigate();
 
   const doLogin = async () => {
-    try {
-      console.log('submit callback, inputs:', inputs);
-      const loginResult = await postLogin(inputs as Credentials);
-      if (loginResult) {
-        localStorage.setItem('token', loginResult.token);
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('doLogin failed', error);
-    }
+    handleLogin(inputs as Credentials);
   };
 
   const {handleSubmit, handleInputChange, inputs} = useForm(
     doLogin,
     initValues,
   );
+
   return (
     <>
       <h3>Login</h3>
