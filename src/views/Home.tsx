@@ -1,9 +1,8 @@
 import MediaRow from '../components/MediaRow';
 import {useMedia} from '../hooks/apiHooks';
-import {MediaItemWithOwner} from '../types/DBTypes';
 
 const Home = () => {
-  const mediaArray: MediaItemWithOwner[] = useMedia();
+  const {mediaArray} = useMedia();
 
   return (
     <>
