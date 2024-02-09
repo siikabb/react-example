@@ -1,6 +1,6 @@
 import React, {createContext, useState} from 'react';
 import {useAuthentication, useUser} from '../hooks/apiHooks';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {AuthContextType, Credentials} from '../types/LocalTypes';
 import {UserWithNoPassword} from '../types/DBTypes';
 
@@ -11,6 +11,7 @@ const UserProvider = ({children}: {children: React.ReactNode}) => {
   const {postLogin} = useAuthentication();
   const {getUserByToken} = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // login, logout and autologin functions are here instead of components
   const handleLogin = async (credentials: Credentials) => {
@@ -49,8 +50,10 @@ const UserProvider = ({children}: {children: React.ReactNode}) => {
         const userResponse = await getUserByToken(token);
         // set user to state
         setUser(userResponse.user);
-        // navigate to home
-        navigate('/');
+
+        // when page is refreshed, the user is redirected to origin (see ProtectedRoute.tsx)
+        const origin = location.state.from.pathname || '/';
+        navigate(origin);
       }
     } catch (e) {
       console.log((e as Error).message);
